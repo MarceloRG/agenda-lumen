@@ -1,7 +1,9 @@
 <?php
 
 namespace CodeAgenda\Http\Controllers;
+
 use CodeAgenda\Entities\Pessoa;
+use Illuminate\Http\Request;
 class AgendaController extends Controller {
 
     /**
@@ -13,5 +15,17 @@ class AgendaController extends Controller {
         $pessoas = Pessoa::where('apelido', 'LIKE', $letra . '%')->get();
         return view('agenda', compact('pessoas'));
     }
+    
+    public function busca(Request $request) {
+        $busca = $request->busca;
+        $pessoas = [];
+        if(!empty($busca)){
+            $pessoas = Pessoa::where('nome', 'LIKE', "%{$busca}%")
+            ->orWhere('apelido', 'LIKE', "%{$busca}%")->get();
+        }
+        return view('agenda', compact('pessoas'));
+    }
+
+ 
 
 }
